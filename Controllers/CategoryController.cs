@@ -1,8 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
+using Shop.Models;
 
 [Route("categories")]
 public class CategoryController : ControllerBase
 {
+
+    [HttpGet]
+    [Route ("{id:int}")]
+    public string Get()
+    {
+        return "GET";
+    }
 
     [HttpGet]
     [Route ("{id:int}")]
@@ -13,21 +21,24 @@ public class CategoryController : ControllerBase
 
     [HttpPost]
     [Route ("")]
-    public string Post()
+    public Category Post([FromBody]Category model)
     {
-        return "POST";
+        return model;
     }
 
     [HttpPut]
-    [Route ("")]
-    public string Put()
+    [Route ("{id}")]
+    public Category Put(int id, [FromBody]Category model)
     {
-        return "PUT";
+        if(id == model.Id)
+            return model;
+        
+        return null;
     }
 
     [HttpDelete]
-    [Route ("")]
-    public string Delete()
+    [Route ("{id}")]
+    public string Delete(int id)
     {
         return "DELETE";
     }
