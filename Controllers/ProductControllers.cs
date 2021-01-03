@@ -11,17 +11,17 @@ namespace Shop.Controllers
 {
 
     [Route("products")]
-   public class ProductController : Controller
-   {
-       [HttpGet]
-       [Route("")]
-       public async Task<ActionResult<List<Product>>> Get(
-           [FromServices]DataContext context
-       )
-       {
-           var products = await context.Products.Include(x => x.Category).AsNoTracking().ToListAsync(); 
+    public class ProductController : Controller
+    {
+        [HttpGet]
+        [Route("")]
+        public async Task<ActionResult<List<Product>>> Get(
+            [FromServices]DataContext context
+        )
+        {
+            var products = await context.Products.Include(x => x.Category).AsNoTracking().ToListAsync(); 
             return Ok(products);
-       }
+        }
 
         [HttpGet]
         [Route("{id:int}")]
@@ -35,7 +35,7 @@ namespace Shop.Controllers
         }
 
         [HttpGet]
-        [Route("/categories/id:{int}")]
+        [Route("categories/{id:int}")]
         public async Task<ActionResult<List<Product>>> GetByCategory(
             int id,
             [FromServices]DataContext context
@@ -44,5 +44,27 @@ namespace Shop.Controllers
             var products = await context.Products.Include(x => x.Category).AsNoTracking().Where(x => x.CategoryId == id).ToListAsync();
             return Ok(products);
         }
-   }
+
+        [HttpPost]
+        [Route("")]
+        public async Task<ActionResult<List<Product>>> Post(
+            [FromBody]Product product,
+            [FromServices]DataContext context
+        )
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                context.Products.Add(product);
+                await context.SaveChangesAsync();
+                return Ok(product);
+            }
+            catch
+            {
+                return BadRequest(new { message = "Não foi possível adicionar o produto"});
+            }
+        }
+    }
 }
