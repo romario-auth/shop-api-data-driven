@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shop.Data;
@@ -15,6 +16,7 @@ namespace Shop.Controllers
 
         [HttpGet]
         [Route ("")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Category>>> Get(
             [FromServices]DataContext context
         )
@@ -25,6 +27,7 @@ namespace Shop.Controllers
 
         [HttpGet]
         [Route ("{id:int}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Category>> GetById(
             int id,
             [FromServices]DataContext context
@@ -36,6 +39,7 @@ namespace Shop.Controllers
 
         [HttpPost]
         [Route ("")]
+        [Authorize(Roles = "employee")]
         public async Task<ActionResult<List<Category>>> Post(
             [FromBody]Category model,
             [FromServices]DataContext context
@@ -58,6 +62,7 @@ namespace Shop.Controllers
 
         [HttpPut]
         [Route ("{id:int}")]
+        [Authorize(Roles = "employee")]
         public async Task<ActionResult<List<Category>>> Put(
             int id,
             [FromBody]Category model,
@@ -90,6 +95,7 @@ namespace Shop.Controllers
 
         [HttpDelete]
         [Route ("{id:int}")]
+        [Authorize(Roles = "employee")]
         public async Task<ActionResult<List<Category>>> Delete(
             int id,
             [FromServices]DataContext context
