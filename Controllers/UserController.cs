@@ -11,7 +11,7 @@ using Shop.Services;
 
 namespace Shop.Controllers
 {
-    [Route("users")]
+    [Route("/users")]
     public class UserController : Controller
     {
         [HttpGet]
@@ -83,7 +83,7 @@ namespace Shop.Controllers
         }
 
         [HttpPost]
-        [Route("/login")]
+        [Route("login")]
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Authenticate
         (
