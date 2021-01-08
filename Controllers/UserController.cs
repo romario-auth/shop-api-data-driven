@@ -43,8 +43,16 @@ namespace Shop.Controllers
 
             try
             {
+                // Força o usuário a ser funcionário na criação da conta
+                model.Role = "employee";
+
                 context.Users.Add(model);
                 await context.SaveChangesAsync();
+
+                // Esconder a senhar antes de devoler a model para o usuário que
+                // se registrou no sistema
+                model.Password = "";
+
                 return model;
             }
             catch
@@ -100,9 +108,12 @@ namespace Shop.Controllers
                 return NotFound( new { message = "Usuário ou senha inválidos"});
 
             var token = TokenService.GenerateToken(user);
+
+            // Esconder a senha
+            user.Password = "";
             return new
             {
-                user = user.UserName,
+                user = user,
                 token = token
             };
         }
